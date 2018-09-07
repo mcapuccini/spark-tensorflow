@@ -1,0 +1,46 @@
+---
+language: python
+
+services:
+  - docker
+
+branches:
+  only:
+    - master
+
+env:
+  global:
+    - YAMLLINT_VERSION=1.8.1
+    - Z_VERSION=0.7.2
+    - HADOOP_VERSION=3.0.0
+  matrix:
+    - >
+      TF_VERSION=1.10.0-gpu-py3
+      SPARK_VERSION=2.3.1
+
+install:
+  - docker pull lukasmartinelli/hadolint
+  - docker pull boiyaa/yamllint:$YAMLLINT_VERSION
+
+before_script:
+  # Check code format
+  - docker run --rm -i lukasmartinelli/hadolint hadolint --ignore DL3015 --ignore DL3008 - < Dockerfile
+  - docker run -v "$PWD:/workdir" "boiyaa/yamllint:$YAMLLINT_VERSION" -c .yamllint.yml -s $(find . -name '*.yml')
+
+script:
+  - tag="mcapuccini/spark-tensorflow:spark-${SPARK_VERSION}-tf-${TF_VERSION}"
+  - >
+    docker build
+    --build-arg TF_VERSION=${TF_VERSION}
+    --build-arg HADOOP_VERSION=${HADOOP_VERSION}
+    --build-arg SPARK_VERSION=${SPARK_VERSION}
+    --build-arg Z_VERSION=${Z_VERSION}
+    --cache-from $tag
+    --tag $tag
+    .
+after_success:
+  - >
+    if [ $TRAVIS_BRANCH = 'master' ] && [ $TRAVIS_PULL_REQUEST = 'false' ]; then
+      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+      docker push $tag
+    fi
