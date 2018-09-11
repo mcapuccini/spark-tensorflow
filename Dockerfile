@@ -50,5 +50,8 @@ RUN curl -sL --retry 3 \
     mv "/usr/zeppelin-${Z_VERSION}-bin-all" "${Z_HOME}" && \
     chown -R root:root "$Z_HOME"
 
+# Zeppelin pip deps
+RUN pip install pandasql==0.7.3
+
 # Use root as workdir
 WORKDIR /
