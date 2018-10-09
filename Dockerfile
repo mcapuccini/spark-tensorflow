@@ -11,6 +11,7 @@ RUN add-apt-repository ppa:webupd8team/java && \
   oracle-java8-set-default && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 # Install Hadoop
 ARG HADOOP_VERSION
