@@ -26,6 +26,14 @@ RUN curl -sL --retry 3 \
   rm -rf "$HADOOP_HOME/share/doc" && \
   chown -R root:root "$HADOOP_HOME"
 
+# Install Hadoop object storage dependencies
+RUN curl  -sL --retry 3 \
+  -o "$HADOOP_HOME/share/hadoop/common/lib/hadoop-aws-$HADOOP_VERSION.jar" \
+  "http://central.maven.org/maven2/org/apache/hadoop/hadoop-aws/$HADOOP_VERSION/hadoop-aws-$HADOOP_VERSION.jar" && \
+  curl  -sL --retry 3 \
+  -o "$HADOOP_HOME/share/hadoop/common/lib/hadoop-openstack-$HADOOP_VERSION.jar" \
+  "http://central.maven.org/maven2/org/apache/hadoop/hadoop-openstack/$HADOOP_VERSION/hadoop-openstack-$HADOOP_VERSION.jar"
+
 # Install Spark
 ARG SPARK_VERSION
 ENV SPARK_VERSION ${SPARK_VERSION}
