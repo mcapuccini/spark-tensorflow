@@ -57,4 +57,4 @@ RUN pip install pandasql==0.7.3
 
 # Reset workdir and default command
 WORKDIR ${Z_HOME}
-CMD /bin/zeppelin
+CMD bin/zeppelin
