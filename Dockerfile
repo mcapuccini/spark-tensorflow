@@ -15,7 +15,9 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 # Install Hadoop
 ARG HADOOP_VERSION
+ARG HADOOP_OPENSTACK_VERSION
 ENV HADOOP_VERSION ${HADOOP_VERSION}
+ENV HADOOP_OPENSTACK_VERSION ${HADOOP_OPENSTACK_VERSION}
 ENV HADOOP_HOME /usr/hadoop-$HADOOP_VERSION
 ENV HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 ENV HADOOP_CLASSPATH="$HADOOP_HOME/etc/hadoop/*:$HADOOP_HOME/share/hadoop/common/lib/*:$HADOOP_HOME/share/hadoop/common/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/hdfs/lib/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/yarn/lib/*:$HADOOP_HOME/share/hadoop/yarn/*:$HADOOP_HOME/share/hadoop/mapreduce/lib/*:$HADOOP_HOME/share/hadoop/mapreduce/*:$HADOOP_HOME/share/hadoop/tools/lib/*"
@@ -25,6 +27,9 @@ RUN curl -sL --retry 3 \
   | gunzip \
   | tar -x -C /usr/ && \
   rm -rf "$HADOOP_HOME/share/doc" && \
+  rm -f "$HADOOP_HOME/share/hadoop/tools/lib/hadoop-openstack-${HADOOP_VERSION}.jar" && \
+  curl -o "$HADOOP_HOME/share/hadoop/tools/lib/hadoop-openstack-${HADOOP_OPENSTACK_VERSION}.jar" -sL --retry 3 \
+  "https://tarballs.openstack.org/sahara-extra/dist/hadoop-openstack/master/hadoop-openstack-${HADOOP_OPENSTACK_VERSION}.jar" && \
   chown -R root:root "$HADOOP_HOME"
 
 # Install Spark
