@@ -12,6 +12,7 @@ env:
   global:
     - YAMLLINT_VERSION=1.8.1
     - HADOOP_VERSION=2.7.7
+    - HADOOP_OPENSTACK_VERSION=2.7.5
   matrix:
     - >
       TAG=latest-gpu
@@ -59,6 +60,7 @@ script:
     docker build
     --build-arg TF_VERSION=${TF_VERSION}
     --build-arg HADOOP_VERSION=${HADOOP_VERSION}
+    --build-arg HADOOP_OPENSTACK_VERSION=${HADOOP_OPENSTACK_VERSION}
     --build-arg SPARK_VERSION=${SPARK_VERSION}
     --build-arg Z_VERSION=${Z_VERSION}
     --cache-from $tag
