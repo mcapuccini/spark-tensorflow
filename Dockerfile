@@ -50,6 +50,7 @@ RUN curl -sL --retry 3 \
 ARG Z_VERSION
 ENV Z_VERSION ${Z_VERSION}
 ENV Z_HOME /usr/zeppelin-$Z_VERSION
+ENV ZEPPELIN_CLASSPATH=${HADOOP_CLASSPATH}
 RUN curl -sL --retry 3 \
     "http://archive.apache.org/dist/zeppelin/zeppelin-${Z_VERSION}/zeppelin-${Z_VERSION}-bin-all.tgz" \
     | gunzip \
