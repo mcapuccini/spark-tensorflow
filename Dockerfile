@@ -61,6 +61,14 @@ RUN curl -sL --retry 3 \
 # Zeppelin pip deps
 RUN pip install pandasql==0.7.3
 
+# Install Docker client
+ARG DOCKER_VERSION
+ENV VERSION ${DOCKER_VERSION}
+RUN curl -L -o "/tmp/docker-$VERSION.tgz" "https://download.docker.com/linux/static/stable/x86_64/docker-$VERSION.tgz" \
+    && tar -xz -C /tmp -f "/tmp/docker-$VERSION.tgz" \
+    && mv /tmp/docker/docker /usr/bin \
+    && rm -rf "/tmp/docker-$VERSION" /tmp/docker
+
 # Reset workdir and default command
 WORKDIR ${Z_HOME}
 CMD bin/zeppelin.sh
